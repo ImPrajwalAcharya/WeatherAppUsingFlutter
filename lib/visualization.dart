@@ -1,8 +1,20 @@
-import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
 import 'package:weatherforecasting/apicall/apirequest.dart';
 import 'package:fl_chart/fl_chart.dart';
+
+import 'main.dart';
+
+List<String> days = [
+  "Day 1",
+  "Day 2",
+  "Day 3",
+  "Day 4",
+  "Day 5",
+  "Day 6",
+  "Day 7",
+];
 
 class Visualize extends StatefulWidget {
   const Visualize({super.key});
@@ -12,21 +24,7 @@ class Visualize extends StatefulWidget {
 }
 
 class _VisualizeState extends State<Visualize> {
-  getdata() async {
-    final variable = await fetchWeather();
-    final res = jsonDecode(variable.body);
-    return res["prediction"];
-    // print(res.runtimeType);
-    // print(res['prediction']);
-  }
-
-  List Title = [
-    "Precipation",
-    "Humidity",
-    "Temperature",
-    "Pressure",
-    "WindSpeed"
-  ];
+  List Title = [ "Pressure","WindSpeed","Humidity", "Temperature" ];
   List chartDatas = [];
   @override
   Widget build(BuildContext context) {
@@ -42,24 +40,23 @@ class _VisualizeState extends State<Visualize> {
             }
 
             final data = (snapshot.data! as dynamic);
-            for (int i = 0; i < 5; i++) {
+            
+            for (int i = 0; i < 4; i++) {
+           
               List<FlSpot> chartData = [
-                FlSpot(1, data[i + 0].toDouble()),
-                FlSpot(2, data[i + 5].toDouble()),
-                FlSpot(3, data[i + 10].toDouble()),
-                FlSpot(4, data[i + 15].toDouble()),
-                FlSpot(5, data[i + 20].toDouble()),
-                FlSpot(6, data[i + 25].toDouble()),
-                FlSpot(7, data[i + 30].toDouble()),
-                FlSpot(8, data[i + 35].toDouble()),
-                FlSpot(9, data[i + 40].toDouble()),
-                FlSpot(10, data[i + 45].toDouble()),
+                FlSpot(1, data[days[0]][0][i].toDouble()),
+                FlSpot(2, data[days[1]][0][i].toDouble()),
+                FlSpot(3, data[days[2]][0][i].toDouble()),
+                FlSpot(4, data[days[3]][0][i].toDouble()),
+                FlSpot(5, data[days[4]][0][i].toDouble()),
+                FlSpot(6, data[days[5]][0][i].toDouble()),
+                FlSpot(7, data[days[6]][0][i].toDouble()),
               ];
               chartDatas.add(chartData);
             }
             return Container(
               color: Colors.white,
-              padding: const EdgeInsets.all(10),
+              // padding: const EdgeInsets.all(10),
               width: double.infinity,
               height: double.infinity,
               child: Column(children: [
@@ -69,7 +66,7 @@ class _VisualizeState extends State<Visualize> {
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height * 0.9,
                     child: ListView.builder(
-                        itemCount: 5,
+                        itemCount: 4,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
                           return Container(
@@ -95,7 +92,12 @@ class _VisualizeState extends State<Visualize> {
                                   width: double.infinity,
                                   height: 250,
                                   child: LineChart(
+                                    
+                                    
                                     LineChartData(
+                                      // maxX: 7,
+                                      // maxY: 79,
+                                      // minY: 78,
                                       backgroundColor: Colors.white,
                                       clipData: FlClipData.none(),
                                       borderData: FlBorderData(show: true),
